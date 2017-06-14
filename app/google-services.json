@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "496364071646",
+    "firebase_url": "https://chol24-8e36f.firebaseio.com",
+    "project_id": "chol24-8e36f",
+    "storage_bucket": "chol24-8e36f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496364071646:android:b730ced1a9b13278",
+        "android_client_info": {
+          "package_name": "com.sgmcommunity.chlo24"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "496364071646-fj534mmah882oqrh9jprscc14fgd4udq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnHluEcUMNKXQzm-P3ezbFJTWgVVrd2zA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

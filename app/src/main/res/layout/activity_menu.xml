@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sgmcommunity.chlo24.activity.Main">
+
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:id="@+id/intro_button"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_marginRight="6dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/menu_ic_noti" />
+
+        <TextView
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textColor="#333"
+            android:textSize="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="천리안24 소개" />
+
+    </LinearLayout>
+
+    <TextView
+        android:background="@drawable/under_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+
+
+    <LinearLayout
+        android:id="@+id/menu_noti_button"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_marginRight="6dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/menu_ic_noti" />
+
+        <TextView
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textColor="#333"
+            android:textSize="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="공지사항" />
+
+    </LinearLayout>
+
+    <TextView
+        android:background="@drawable/under_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:id="@+id/menu_morgue_button"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_marginRight="6dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/menu_ic_morgue" />
+
+        <TextView
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textColor="#333"
+            android:textSize="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="자료실" />
+
+    </LinearLayout>
+
+    <TextView
+        android:background="@drawable/under_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+
+    <LinearLayout
+        android:id="@+id/menu_inquiry_button"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_marginRight="6dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/menu_ic_inquiry" />
+
+        <TextView
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textColor="#333"
+            android:textSize="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="문의하기" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:background="@drawable/under_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_marginRight="6dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/menu_setting_button" />
+
+        <TextView
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textColor="#333"
+            android:textSize="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="설정" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:textColor="#333"
+        android:gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="최신버전                    1.0.0\n현재버전                    1.0.0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"/>
+
+    <!--<TextView-->
+        <!--android:textColor="#0a438b"-->
+        <!--android:id="@+id/chol24_intro_button"-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="18dp"-->
+        <!--android:text="천리안24 소개"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+
+</LinearLayout>

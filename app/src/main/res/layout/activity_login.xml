@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background"
+    android:orientation="vertical"
+    tools:context="com.sgmcommunity.chlo24.activity.Login">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#0d5aba"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="로그인"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="30dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="10dp"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/sign_up_icon_id" />
+
+                <EditText
+                    android:inputType="textVisiblePassword"
+                    android:id="@+id/user_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:hint="아이디"
+                    android:textColor="#333"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="20dp"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/sign_up_icon_pw" />
+
+                <EditText
+                    android:id="@+id/user_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:hint="비밀번호"
+                    android:inputType="textPassword"
+                    android:textColor="#333"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+
+            <Button
+                android:textStyle="bold"
+                android:id="@+id/login_button"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginBottom="10dp"
+                android:background="#0d5aba"
+                android:text="로그인"
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
+            <Button
+                android:textStyle="bold"
+                android:id="@+id/sign_up_button"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:background="#345e9e"
+                android:text="회원가입"
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+        <ImageView
+            android:src="@drawable/ic_mobile_version_white"
+            android:layout_gravity="center"
+            android:id="@+id/mobil_vs_button"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_margin="30dp"
+             />
+
+</LinearLayout>

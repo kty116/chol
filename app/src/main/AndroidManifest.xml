@@ -65,7 +65,6 @@
 
         <activity android:name=".activity.PushMessageWebview" />
         <activity android:name=".activity.CustomActivity" />
-        <activity android:name=".activity.TakePicture" />
         <activity android:name=".activity.Intro" />
         <activity
             android:name=".activity.Camera"

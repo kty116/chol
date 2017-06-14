@@ -31,13 +31,11 @@ import static android.content.ContentValues.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    //    private static final String TAG = "FirebaseMsgService";
     public static String contents = null;
     private Intent intent;
     private String appStatus = "BACKGROUND";
     private SharedPreferences mPref;
 
-    // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //포그라운드에서만 작동
@@ -77,7 +75,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String title, String text) {
-//        String appStatus = String.valueOf(((CustomApplication) getApplication()).getAppStatus());
 
         if(Main.isForeGround) {
             intent = new Intent(this, PushMessageWebview.class);

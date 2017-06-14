@@ -77,71 +77,8 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
         mCaptureButton = findViewById(R.id.capture_button);
         mCaptureButton.setOnClickListener(this);
 
-
         display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
-//        mDisplayOrientationDetector = new DisplayOrientationDetector(this) {
-//            @Override
-//            public void onDisplayOrientationChanged(int displayOrientation) {
-//
-//                Log.d("onDisplayOrientat ",""+mDisplayOrientationDetector.getLastKnownDisplayOrientation());
-////                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//
-//            }
-//        };
-//        mDisplayOrientationDetector.enable(display);
-
-
-//        if (getResources().getConfiguration().orientation < 90) {
-//            orientation = 90;
-//            Log.d("------------",orientation+"");
-//
-//
-//        } else if (getResources().getConfiguration().orientation < 180) {
-//            orientation = 180;
-//            Log.d("------------",orientation+"");
-//        } else if (getResources().getConfiguration().orientation < 270) {
-//            orientation = 270;
-//            Log.d("------------",orientation+"");
-//        } else if (getResources().getConfiguration().orientation < 360) {
-//            orientation = 0;
-//            Log.d("------------",orientation+"");
-//        }
-
-        //                Log.d("onConfiguratihanged: ", "180");
-//                if (ActivityInfo.S) { //89까지
-//                    orien = 90;
-//                    Log.d("------------", orientation + "");
-//                } else if (orientation < 180) {
-//                    orien = 0;
-//                    Log.d("------------", orientation + "");
-//                } else if (orientation < 270) {
-//                    orien = 180;
-//                    Log.d("------------", orientation + "");
-//                }
-//                Log.d("onOrientatged: ", orientation + "");
-//
-//                switch (orientation) {
-//
-//
-//////
-//                    case orientation > 45 :
-//                        Log.d("onConfiguratihanged: ", "180");
-//                        break;
-//
-//                    case 360:
-//                        Log.d("onConfiguratihanged: ", "270");
-//                        break;
-////
-//
-//                    case 0:
-//                        Log.d("onConfiguratihanged: ", "90");
-//                        break;
-//
-//                    case 270:
-//                        Log.d("onConfiguratihanged: ", "0");
-//                        break;
-//                }
         eventListener = new OrientationEventListener(getBaseContext(), SensorManager.SENSOR_DELAY_NORMAL) {
             @Override
             public void onOrientationChanged(int orientation) {
@@ -183,7 +120,6 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
         eventListener.disable();
 
     }
-
 
     @Override
     public void onClick(View v) {
@@ -412,12 +348,6 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
 
                 //여기서는 화면 처음에 위치서비스 활성화 안됏을때 물어보는 곳
                 //아무 설정안하고 사진찍을때 다시 체크한뒤 쓰레드 타게
-//                if (checkLocationServicesStatus()) {
-////                    Toast.makeText(this, "사진에 위치 정보를 저장합니다.", Toast.LENGTH_SHORT).show();
-//                } else {
-////                    Toast.makeText(this, "사진에 위치 정보를 저장하지 않습니다.", Toast.LENGTH_SHORT).show();
-//                }
-
                 break;
         }
     }
@@ -453,7 +383,6 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
 
     public String getCurrentAddress(LatLng latLng) {
 
-        //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
         List<Address> addresses;
@@ -465,7 +394,6 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
                     latLng.longitude,
                     1);
         } catch (IOException ioException) {
-            //네트워크 문제
             Toast.makeText(this, "지오코더 서비스 사용불가", Toast.LENGTH_LONG).show();
             return "지오코더 서비스 사용불가";
         } catch (IllegalArgumentException illegalArgumentException) {

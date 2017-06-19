@@ -108,9 +108,9 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
         super.onResume();
         mCameraView.start();
         eventListener.enable();
-        if (!checkLocationServicesStatus()) { //gps모드 비 활성화시
-            showDialogForLocationServiceSetting();
-        }
+//        if (!checkLocationServicesStatus()) { //gps모드 비 활성화시
+//            showDialogForLocationServiceSetting();
+//        }
     }
 
     @Override
@@ -190,6 +190,7 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
             out = new FileOutputStream(Folder + "/" + file);
             Log.d("----------", "getAlbumStorageDir: " + Folder + "/" + file);
             bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
             out.close();
             //파일 저장 후 미디어 스캐닝
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,

@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.sgmcommunity.chlo24.push.MyFirebaseMessagingService;
 
 public class Main extends CustomActivity implements View.OnClickListener {
 
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private final long FINSH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
     private SharedPreferences mPref;
@@ -62,7 +64,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
         memberDTO.setUserId(mPref.getString("id", "null"));
         memberDTO.setUserPw(mPref.getString("password", "null"));
 
-        if(!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))){
+        if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
             mLoginButton.setImageResource(R.drawable.main_ic_logout_white);
         } else {
             mLoginButton.setImageResource(R.drawable.main_ic_login_white);
@@ -92,7 +94,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
                 break;
 
             case R.id.logout_button:
-                if(!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))){
+                if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     //값 있을때
                     AlertDialog.Builder alert_confirm = new AlertDialog.Builder(Main.this);
                     alert_confirm.setMessage("로그아웃 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
@@ -102,13 +104,13 @@ public class Main extends CustomActivity implements View.OnClickListener {
                                     SharedPreferences.Editor editor = mPref.edit();
                                     editor.clear();
                                     editor.commit();
-                                    memberDTO.setUserId(mPref.getString("id","null"));
-                                    memberDTO.setUserPw(mPref.getString("password","null"));
+                                    memberDTO.setUserId(mPref.getString("id", "null"));
+                                    memberDTO.setUserPw(mPref.getString("password", "null"));
                                     CookieManager.getInstance().removeSessionCookie();
                                     CookieManager.getInstance().removeAllCookie();
                                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                                         CookieSyncManager.getInstance().sync();
-                                    }else {
+                                    } else {
                                         CookieManager.getInstance().flush();
                                     }
                                     Toast.makeText(Main.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -138,39 +140,47 @@ public class Main extends CustomActivity implements View.OnClickListener {
 
                 }
 
-            // 메인 아이콘
+                // 메인 아이콘
 
             case R.id.look_button:
-                if(!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
+                if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent = new Intent(this, WebviewActivity.class);
                     intent.putExtra("web_address", "http://chol24.com/app_list.php");
                     intent.putExtra("title_text", "캠페인 보기");
                     startActivity(intent);
-                }else {
+                } else {
                     setLoginDialog();
                 }
                 break;
 
             case R.id.participation_button:
-                if(!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
+                if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent1 = new Intent(this, WebviewActivity.class);
                     intent1.putExtra("web_address", "http://www.chol24.com/bbs/app_write.php?bo_table=with");
                     intent1.putExtra("title_text", "캠페인 참여");
                     startActivity(intent1);
-                }else {
+                } else {
                     setLoginDialog();
                 }
                 break;
 
             case R.id.camera_button:
-                Intent intent4 = new Intent(this, Camera.class);
-                startActivity(intent4);
+                if (!checkLocationServicesStatus()) { //gps모드 비 활성화시
+                    showDialogForLocationServiceSetting(Camera.class);
+                } else {
+                    Intent intent4 = new Intent(this, Camera.class);
+                    startActivity(intent4);
+                }
                 mMainDrawer.closeDrawer(mNavMenu);
                 break;
 
             case R.id.video_button:
-                Intent intent7 = new Intent(this, Main2Activity.class);
-                startActivity(intent7);
+                if (!checkLocationServicesStatus()) { //gps모드 비 활성화시
+                    showDialogForLocationServiceSetting(Main2Activity.class);
+                } else {
+                    Intent intent7 = new Intent(this, Main2Activity.class);
+                    startActivity(intent7);
+                }
                 mMainDrawer.closeDrawer(mNavMenu);
                 break;
 
@@ -188,42 +198,111 @@ public class Main extends CustomActivity implements View.OnClickListener {
                 break;
 
             case R.id.menu_inquiry_button:
-                if(!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
+                if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent6 = new Intent(this, WebviewActivity.class);
                     intent6.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=qa");
                     intent6.putExtra("title_text", "문의하기");
                     startActivity(intent6);
                     mMainDrawer.closeDrawer(mNavMenu);
-                }else {
+                } else {
                     setLoginDialog();
                 }
                 break;
 
             case R.id.menu_morgue_button:
-                if(!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
+                if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent8 = new Intent(this, WebviewActivity.class);
                     intent8.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=Files");
                     intent8.putExtra("title_text", "자료실");
                     startActivity(intent8);
                     mMainDrawer.closeDrawer(mNavMenu);
-                }else {
+                } else {
                     setLoginDialog();
                 }
                 break;
 
             case R.id.menu_noti_button:
-                if(!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
+                if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent5 = new Intent(this, WebviewActivity.class);
                     intent5.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent5.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=Notice");
                     intent5.putExtra("title_text", "공지사항");
                     startActivity(intent5);
                     mMainDrawer.closeDrawer(mNavMenu);
-                }else {
+                } else {
                     setLoginDialog();
                 }
                 break;
         }
+    }
+
+    public void setLoginDialog() {
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(Main.this);
+        alert_confirm.setMessage("로그인이 필요한 서비스 입니다.\n로그인 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        SharedPreferences.Editor editor = mPref.edit();
+//                        editor.clear();
+//                        editor.commit();
+//                        Log.d("------", "onClick: " + mPref.getString("token", "null"));
+                        Intent intent = new Intent(Main.this, Login.class);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("취소", null);
+        AlertDialog alert = alert_confirm.create();
+        alert.show();
+    }
+
+    private void showDialogForLocationServiceSetting(final Class activity) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("위치 서비스 비활성화");
+        builder.setMessage("사진에 위치 정보를 저장하기 위해서는 위치 서비스가 필요합니다.\n"
+                + "위치 서비스를 활성화를 원하시면 설정을 누르세요.");
+        builder.setCancelable(true);
+        builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+
+                Intent callGPSSettingIntent
+                        = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+
+                startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE);
+
+            }
+        });
+//        builder.setNegativeButton("취소", null);
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(Main.this, activity);
+                startActivity(intent);
+            }
+        });
+        builder.create().show();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+
+            case GPS_ENABLE_REQUEST_CODE:
+
+                //여기서는 화면 처음에 위치서비스 활성화 안됏을때 물어보는 곳
+                //아무 설정안하고 사진찍을때 다시 체크한뒤 쓰레드 타게
+                break;
+        }
+    }
+
+    public boolean checkLocationServicesStatus() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
 
@@ -240,24 +319,6 @@ public class Main extends CustomActivity implements View.OnClickListener {
             backPressedTime = tempTime;
             Toast.makeText(getApplicationContext(), "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void setLoginDialog(){
-        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(Main.this);
-        alert_confirm.setMessage("로그인이 필요한 서비스 입니다.\n로그인 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        SharedPreferences.Editor editor = mPref.edit();
-//                        editor.clear();
-//                        editor.commit();
-//                        Log.d("------", "onClick: " + mPref.getString("token", "null"));
-                        Intent intent = new Intent(Main.this, Login.class);
-                        startActivity(intent);
-                    }
-                }).setNegativeButton("취소", null);
-        AlertDialog alert = alert_confirm.create();
-        alert.show();
     }
 
     @Override

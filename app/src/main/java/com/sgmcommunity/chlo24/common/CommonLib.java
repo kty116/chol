@@ -41,7 +41,7 @@ public class CommonLib{
             Cookie eachCookie = cookies.get(i);
             String cookieString = eachCookie.getName() + "=" + eachCookie.getValue();
             cookieManager.setCookie("http://www.chol24.com", cookieString);
-            Log.i(">>>>>", "cookie : " + cookieString);
+//            Log.i(">>>>>", "cookie : " + cookieString);
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             CookieSyncManager.getInstance().sync();

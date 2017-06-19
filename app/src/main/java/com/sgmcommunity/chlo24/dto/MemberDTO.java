@@ -9,7 +9,6 @@ import java.io.Serializable;
 public class MemberDTO implements Serializable {
     String userId;
     String userPw;
-    String token;
 
     public String getUserId() {
         return userId;
@@ -25,13 +24,5 @@ public class MemberDTO implements Serializable {
 
     public void setUserPw(String userPw) {
         this.userPw = userPw;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

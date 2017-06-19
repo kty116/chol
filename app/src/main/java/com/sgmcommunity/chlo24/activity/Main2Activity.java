@@ -122,14 +122,14 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(Main2Activity.this, "succeed", Toast.LENGTH_LONG).show();
                     try {
 
-                        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+//                        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
                         cam.unlock();
                         mediaRecorder.setCamera(cam);
                         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
-                        mediaRecorder.setVideoFrameRate(15);
-                        mediaRecorder.setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
+//                        mediaRecorder.setVideoFrameRate(15);
+//                        mediaRecorder.setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
                         mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
 
                         mediaRecorder.setOrientationHint(90);

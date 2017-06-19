@@ -42,6 +42,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
         findViewById(R.id.menu_inquiry_button).setOnClickListener(this);
         findViewById(R.id.menu_morgue_button).setOnClickListener(this);
         findViewById(R.id.menu_noti_button).setOnClickListener(this);
+        findViewById(R.id.camera_button).setOnClickListener(this);
         mSettingButton = (ImageView) findViewById(R.id.setting_button);
         findViewById(R.id.logout_button).setOnClickListener(this);
         mSettingButton.setOnClickListener(this);
@@ -67,33 +68,14 @@ public class Main extends CustomActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.look_button:
-                Intent intent = new Intent(this, WebviewActivity.class);
-                intent.putExtra("web_address", "http://chol24.com/app_list.php");
-                intent.putExtra("title_text", "캠페인 보기");
-                startActivity(intent);
-                break;
 
-            case R.id.participation_button:
-                Intent intent1 = new Intent(this, WebviewActivity.class);
-                intent1.putExtra("web_address", "http://www.chol24.com/bbs/app_write.php?bo_table=with");
-                intent1.putExtra("title_text", "캠페인 참여");
-                startActivity(intent1);
-                break;
-
-            case R.id.mobil_vs_button:
-                Intent intent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(("http://www.chol24.com")));
-                startActivity(intent2);
-                break;
+            //액션바
 
             case R.id.setting_button:
-
                 mMainDrawer.openDrawer(mNavMenu);
-
                 break;
 
             case R.id.logout_button:
-
                 AlertDialog.Builder alert_confirm = new AlertDialog.Builder(Main.this);
                 alert_confirm.setMessage("로그아웃 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
                         new DialogInterface.OnClickListener() {
@@ -110,37 +92,69 @@ public class Main extends CustomActivity implements View.OnClickListener {
                         }).setNegativeButton("취소", null);
                 AlertDialog alert = alert_confirm.create();
                 alert.show();
-
                 break;
 
-            case R.id.intro_button:
+            // 메인 아이콘
 
+            case R.id.look_button:
+                Intent intent = new Intent(this, WebviewActivity.class);
+                intent.putExtra("web_address", "http://chol24.com/app_list.php");
+                intent.putExtra("title_text", "캠페인 보기");
+                startActivity(intent);
+                break;
+
+            case R.id.participation_button:
+                Intent intent1 = new Intent(this, WebviewActivity.class);
+                intent1.putExtra("web_address", "http://www.chol24.com/bbs/app_write.php?bo_table=with");
+                intent1.putExtra("title_text", "캠페인 참여");
+                startActivity(intent1);
+                break;
+
+            case R.id.camera_button:
+                Intent intent4 = new Intent(this, Camera.class);
+                startActivity(intent4);
+                mMainDrawer.closeDrawer(mNavMenu);
+                break;
+
+            case R.id.video_button:
+                Intent intent7 = new Intent(this, Main2Activity.class);
+                startActivity(intent7);
+                mMainDrawer.closeDrawer(mNavMenu);
+                break;
+
+            case R.id.mobil_vs_button:
+                Intent intent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(("http://www.chol24.com")));
+                startActivity(intent2);
+                break;
+
+            //사이드 메뉴
+
+            case R.id.intro_button:
                 Intent intent3 = new Intent(this, Intro.class);
                 startActivity(intent3);
                 mMainDrawer.closeDrawer(mNavMenu);
                 break;
 
-            case R.id.video_button:
-                Intent intent4 = new Intent(this, Camera.class);
-                startActivity(intent4);
-
-                break;
-
             case R.id.menu_inquiry_button:
-
-                Intent intent6 = new Intent(this, Main2Activity.class);
+                Intent intent6 = new Intent(this, WebviewActivity.class);
+                intent6.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=qa");
+                intent6.putExtra("title_text", "문의하기");
                 startActivity(intent6);
-
+                mMainDrawer.closeDrawer(mNavMenu);
                 break;
 
             case R.id.menu_morgue_button:
-
+                Intent intent8 = new Intent(this, WebviewActivity.class);
+                intent8.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=Files");
+                intent8.putExtra("title_text", "자료실");
+                startActivity(intent8);
+                mMainDrawer.closeDrawer(mNavMenu);
                 break;
 
             case R.id.menu_noti_button:
                 Intent intent5 = new Intent(this, WebviewActivity.class);
                 intent5.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent5.putExtra("web_address", "http://www.chol24.com/bbs/app_notice.php");
+                intent5.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=Notice");
                 intent5.putExtra("title_text", "공지사항");
                 startActivity(intent5);
                 mMainDrawer.closeDrawer(mNavMenu);

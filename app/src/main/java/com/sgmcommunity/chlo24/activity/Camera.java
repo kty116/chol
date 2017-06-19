@@ -359,27 +359,27 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    private boolean checkCameraHardware() {
-
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-
-            // 카메라가 최소한 한개 있는 경우 처리
-
-            Log.i("dddd", "Number of available camera : " + camera.getNumberOfCameras());
-
-            return true;
-
-        } else {
-
-            // 카메라가 전혀 없는 경우
-
-            Toast.makeText(this, "No camera found!", Toast.LENGTH_SHORT).show();
-
-            return false;
-
-        }
-
-    }
+//    private boolean checkCameraHardware() {
+//
+//        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+//
+//            // 카메라가 최소한 한개 있는 경우 처리
+//
+//            Log.i("dddd", "Number of available camera : " + camera.getNumberOfCameras());
+//
+//            return true;
+//
+//        } else {
+//
+//            // 카메라가 전혀 없는 경우
+//
+//            Toast.makeText(this, "No camera found!", Toast.LENGTH_SHORT).show();
+//
+//            return false;
+//
+//        }
+//
+//    }
 
     public String getCurrentAddress(LatLng latLng) {
 
@@ -401,7 +401,6 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
             return "잘못된 GPS 좌표";
 
         }
-
 
         if (addresses == null || addresses.size() == 0) {
             Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();

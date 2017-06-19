@@ -18,9 +18,9 @@
         <ImageView
             android:layout_gravity="center"
             android:layout_marginRight="6dp"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/menu_ic_noti" />
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:src="@mipmap/ic_launcher" />
 
         <TextView
             android:textStyle="bold"

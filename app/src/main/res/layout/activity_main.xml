@@ -101,7 +101,7 @@
                         android:layout_width="58dp"
                         android:layout_height="58dp"
                         android:layout_marginBottom="15dp"
-                        android:src="@drawable/main_ic_create" />
+                        android:src="@drawable/main_ic_filter_vintage" />
 
                     <TextView
                         android:layout_width="wrap_content"

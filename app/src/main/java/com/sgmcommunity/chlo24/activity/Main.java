@@ -35,6 +35,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
     public static boolean isForeGround;
     private MemberDTO memberDTO;
     private ImageView mLoginButton;
+    private Class mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +168,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
             case R.id.camera_button:
                 if (!checkLocationServicesStatus()) { //gps모드 비 활성화시
                     showDialogForLocationServiceSetting(Camera.class);
+                    mActivity = Camera.class;
                 } else {
                     Intent intent4 = new Intent(this, Camera.class);
                     startActivity(intent4);
@@ -177,6 +179,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
             case R.id.video_button:
                 if (!checkLocationServicesStatus()) { //gps모드 비 활성화시
                     showDialogForLocationServiceSetting(Main2Activity.class);
+                    mActivity = Main2Activity.class;
                 } else {
                     Intent intent7 = new Intent(this, Main2Activity.class);
                     startActivity(intent7);
@@ -292,6 +295,10 @@ public class Main extends CustomActivity implements View.OnClickListener {
 
             case GPS_ENABLE_REQUEST_CODE:
 
+                Intent intent = new Intent(this,mActivity);
+                startActivity(intent);
+
+                //설정 들어간뒤의 화면
                 //여기서는 화면 처음에 위치서비스 활성화 안됏을때 물어보는 곳
                 //아무 설정안하고 사진찍을때 다시 체크한뒤 쓰레드 타게
                 break;

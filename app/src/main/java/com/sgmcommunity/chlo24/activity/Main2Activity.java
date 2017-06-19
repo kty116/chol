@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.sgmcommunity.chlo24.R;
@@ -21,12 +21,12 @@ import java.util.Date;
 
 public class Main2Activity extends AppCompatActivity implements View.OnClickListener, SurfaceHolder.Callback {
 
-    private Button mButton;
     private SurfaceView mSurface;
     private Camera cam;
     private SurfaceHolder sv;
     private MediaRecorder mediaRecorder;
     private boolean recording = false;
+    private ImageView mCapterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,8 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_main2);
 
         mSurface = (SurfaceView) findViewById(R.id.surface_view);
-        mButton = (Button) findViewById(R.id.take_button);
-        mButton.setOnClickListener(this);
+        mCapterButton = (ImageView) findViewById(R.id.take_button);
+        mCapterButton.setOnClickListener(this);
         mediaRecorder = new MediaRecorder();
         cam = android.hardware.Camera.open();
         cam.setDisplayOrientation(90);

@@ -1,9 +1,11 @@
 package com.sgmcommunity.chlo24.activity;
 
+import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +33,8 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     private ImageView mCapterButton;
     private OrientationEventListener eventListener;
     private int orient;
+    private String mFileName;
+    private File mFolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +55,19 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onOrientationChanged(int orientation) {
 
-                if(orientation > 45 && orientation <= 135){
+                if (orientation > 45 && orientation <= 135) {
 //                    Log.d("onOrientationChanged: ", "거꾸로 가로");
                     orient = 180;
 
-                }else if (orientation > 135 && orientation <= 225){
+                } else if (orientation > 135 && orientation <= 225) {
 //                    Log.d("onOrientationChanged: ", "거꾸로 세로");
                     orient = 270;
 
-                }else if (orientation > 225 && orientation <=315){
+                } else if (orientation > 225 && orientation <= 315) {
 //                    Log.d("onOrientationChanged: ", "가로");
                     orient = 0;
 
-                }else {
+                } else {
 //                    Log.d("onOrientationChanged: ", "세로");
                     orient = 90;
                 }
@@ -137,13 +141,18 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
 
         if (recording) {
+
             mediaRecorder.stop();
             mediaRecorder.release();
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    Uri.parse("file://" + mFolder + "/" + mFileName)));
             cam.lock();
             recording = false;
 
+
         } else {
             runOnUiThread(new Runnable() {
+
                 @Override
                 public void run() {
                     Toast.makeText(Main2Activity.this, "succeed", Toast.LENGTH_LONG).show();
@@ -161,8 +170,11 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                         mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
 
                         mediaRecorder.setOrientationHint(orient);
-                        mediaRecorder.setOutputFile(new File(Environment.getExternalStoragePublicDirectory(
-                                Environment.DIRECTORY_DCIM), "Chol24") + "/" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4");
+
+                        mFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Chol24");
+                        mFileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+
+                        mediaRecorder.setOutputFile(mFolder + "/" + mFileName);
 
                         mediaRecorder.setPreviewDisplay(sv.getSurface());
                         mediaRecorder.prepare();

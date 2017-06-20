@@ -176,6 +176,7 @@
     </FrameLayout>
 
     <LinearLayout
+        android:clickable="true"
         android:id="@+id/nav_menu"
         android:layout_width="240dp"
         android:layout_height="match_parent"

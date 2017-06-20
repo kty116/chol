@@ -1,11 +1,13 @@
 package com.sgmcommunity.chlo24.activity;
 
 import android.hardware.Camera;
+import android.hardware.SensorManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -27,6 +29,8 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     private MediaRecorder mediaRecorder;
     private boolean recording = false;
     private ImageView mCapterButton;
+    private OrientationEventListener eventListener;
+    private int orient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,37 +40,75 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         mSurface = (SurfaceView) findViewById(R.id.surface_view);
         mCapterButton = (ImageView) findViewById(R.id.take_button);
         mCapterButton.setOnClickListener(this);
-        mediaRecorder = new MediaRecorder();
-        cam = android.hardware.Camera.open();
-        cam.setDisplayOrientation(90);
+
+//        cam = android.hardware.Camera.open();
+//        cam.setDisplayOrientation(90);
         sv = mSurface.getHolder();
         sv.addCallback(this);
         sv.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        eventListener = new OrientationEventListener(getBaseContext(), SensorManager.SENSOR_DELAY_NORMAL) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+
+                if(orientation > 45 && orientation <= 135){
+//                    Log.d("onOrientationChanged: ", "거꾸로 가로");
+                    orient = 180;
+
+                }else if (orientation > 135 && orientation <= 225){
+//                    Log.d("onOrientationChanged: ", "거꾸로 세로");
+                    orient = 270;
+
+                }else if (orientation > 225 && orientation <=315){
+//                    Log.d("onOrientationChanged: ", "가로");
+                    orient = 0;
+
+                }else {
+//                    Log.d("onOrientationChanged: ", "세로");
+                    orient = 90;
+                }
+            }
+        };
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        eventListener.enable();
+//        if (!checkLocationServicesStatus()) { //gps모드 비 활성화시
+//            showDialogForLocationServiceSetting();
+//        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        eventListener.disable();
 
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        if (cam == null) {
+        cam = Camera.open();
+        cam.setDisplayOrientation(90);
+        try {
+            cam.setPreviewDisplay(holder);
+        } catch (IOException exception) {
+            cam.release();
+            cam = null;
 
-            try {
-                cam.setPreviewDisplay(holder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
-        Camera.Parameters parameters = cam.getParameters();
-
         try {
             cam.stopPreview();
         } catch (Exception e) {
         }
-        setCamera(cam);
+        Camera.Parameters parameters = cam.getParameters();
         try {
             cam.setPreviewDisplay(sv);
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
@@ -77,32 +119,17 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    public void setCamera(Camera camera) {
-        cam = camera;
-    }
-
-
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
         if (mediaRecorder != null) {
             mediaRecorder.release();
+            mediaRecorder = null;
         }
-        mediaRecorder = null;
-        cam.stopPreview();
-        cam.release();
-        cam = null;
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (recording) {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-            cam.lock();
-            recording = false;
+        if (cam != null) {
+            cam.stopPreview();
+            cam.release();
+            cam = null;
         }
     }
 
@@ -122,6 +149,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(Main2Activity.this, "succeed", Toast.LENGTH_LONG).show();
                     try {
 
+                        mediaRecorder = new MediaRecorder();
 //                        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
                         cam.unlock();
                         mediaRecorder.setCamera(cam);
@@ -132,7 +160,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 //                        mediaRecorder.setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
                         mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
 
-                        mediaRecorder.setOrientationHint(90);
+                        mediaRecorder.setOrientationHint(orient);
                         mediaRecorder.setOutputFile(new File(Environment.getExternalStoragePublicDirectory(
                                 Environment.DIRECTORY_DCIM), "Chol24") + "/" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4");
 
@@ -141,6 +169,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                         mediaRecorder.start();
                         recording = true;
                         Toast.makeText(Main2Activity.this, "start", Toast.LENGTH_LONG).show();
+                        Thread.sleep(1000);
                     } catch (final Exception ex) {
                         ex.printStackTrace();
                         mediaRecorder.release();

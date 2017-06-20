@@ -84,19 +84,19 @@ public class Camera extends AppCompatActivity implements View.OnClickListener, G
             public void onOrientationChanged(int orientation) {
 
                 if(orientation > 45 && orientation <= 135){
-                    Log.d("onOrientationChanged: ", "거꾸로 가로");
+//                    Log.d("onOrientationChanged: ", "거꾸로 가로");
                     orient = 180;
 
                 }else if (orientation > 135 && orientation <= 225){
-                    Log.d("onOrientationChanged: ", "거꾸로 세로");
+//                    Log.d("onOrientationChanged: ", "거꾸로 세로");
                     orient = 270;
 
                 }else if (orientation > 225 && orientation <=315){
-                    Log.d("onOrientationChanged: ", "가로");
+//                    Log.d("onOrientationChanged: ", "가로");
                     orient = 0;
 
                 }else {
-                    Log.d("onOrientationChanged: ", "세로");
+//                    Log.d("onOrientationChanged: ", "세로");
                     orient = 90;
                 }
             }

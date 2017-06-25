@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
@@ -16,9 +18,11 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.sgmcommunity.chlo24.BuildConfig;
 import com.sgmcommunity.chlo24.R;
 import com.sgmcommunity.chlo24.dto.MemberDTO;
 import com.sgmcommunity.chlo24.push.MyFirebaseMessagingService;
@@ -36,6 +40,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
     private MemberDTO memberDTO;
     private ImageView mLoginButton;
     private Class mActivity;
+    private TextView mVersionText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,17 @@ public class Main extends CustomActivity implements View.OnClickListener {
         mLoginButton = (ImageView) findViewById(R.id.logout_button);
         mNavMenu = (LinearLayout) findViewById(R.id.nav_menu);
         mMainDrawer = (DrawerLayout) findViewById(R.id.main_drawer);
+        mVersionText = (TextView) findViewById(R.id.version_text);
+        String LVersionName = BuildConfig.VERSION_NAME;
+        String CVersionName = null;
+        try {
+            PackageInfo pi= getPackageManager().getPackageInfo(getPackageName(), 0);
+            CVersionName = pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        mVersionText.setText("최신버전                    "+LVersionName+"\n현재버전                    "+CVersionName);
 
         mSettingButton.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
@@ -203,7 +219,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
             case R.id.menu_inquiry_button:
                 if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent6 = new Intent(this, WebviewActivity.class);
-                    intent6.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=qa");
+                    intent6.putExtra("web_address", "http://www.chol24.com/app_contact.php");
                     intent6.putExtra("title_text", "문의하기");
                     startActivity(intent6);
                     mMainDrawer.closeDrawer(mNavMenu);
@@ -215,7 +231,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
             case R.id.menu_morgue_button:
                 if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent8 = new Intent(this, WebviewActivity.class);
-                    intent8.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=Files");
+                    intent8.putExtra("web_address", "http://www.chol24.com/app_pds.php");
                     intent8.putExtra("title_text", "자료실");
                     startActivity(intent8);
                     mMainDrawer.closeDrawer(mNavMenu);
@@ -228,7 +244,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
                 if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent5 = new Intent(this, WebviewActivity.class);
                     intent5.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    intent5.putExtra("web_address", "http://www.chol24.com/bbs/board.php?bo_table=Notice");
+                    intent5.putExtra("web_address", "http://www.chol24.com/app_notice.php");
                     intent5.putExtra("title_text", "공지사항");
                     startActivity(intent5);
                     mMainDrawer.closeDrawer(mNavMenu);

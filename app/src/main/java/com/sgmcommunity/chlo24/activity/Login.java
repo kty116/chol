@@ -8,9 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.webkit.CookieManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,13 +27,11 @@ import cz.msebera.android.httpclient.Header;
 
 public class Login extends CustomActivity implements View.OnClickListener {
 
-    private static final String TAG = Login.class.getSimpleName();
+//    private static final String TAG = Login.class.getSimpleName();
     private EditText mUserPassWord;
     private EditText mUserId;
     private SharedPreferences mPref;
     private ProgressDialog mProgressDialog;
-    private CookieManager cookieManager;
-    private String mToken;
     private AsyncHttpClient mhttpClient;
     private String token;
 
@@ -54,15 +50,6 @@ public class Login extends CustomActivity implements View.OnClickListener {
         mProgressDialog = new ProgressDialog(Login.this);
         mProgressDialog.setMessage("로그인 요청중입니다.");
 
-//        mToken = FirebaseInstanceId.getInstance().getToken();
-
-//        token = FirebaseInstanceId.getInstance().getToken();
-//
-//        Log.d(TAG, "onCreate: ---------------"+token.toString());
-//        String userid = mPref.getString("id", "null");
-//        if (!(userid.equals("null"))) {
-//            mUserId.setText(userid);
-//        }
     }
 
     @Override
@@ -154,9 +141,9 @@ public class Login extends CustomActivity implements View.OnClickListener {
                         Toast.makeText(Login.this, "아이디 또는 패스워드가 틀립니다.", Toast.LENGTH_SHORT).show();
                     }
 
-                    Log.d(TAG, "onSuccess: " + error);
+//                    Log.d(TAG, "onSuccess: " + error);
                 } catch (JSONException e) {
-                    Log.d(TAG, "onSuccess: 응답 메세지 없음");
+//                    Log.d(TAG, "onSuccess: 응답 메세지 없음");
                 }
             }
 

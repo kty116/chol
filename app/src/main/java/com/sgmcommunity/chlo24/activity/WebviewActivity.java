@@ -28,7 +28,7 @@ import java.io.File;
 
 public class WebviewActivity extends CustomActivity implements View.OnClickListener {
 
-    private static final String TAG = WebviewActivity.class.getSimpleName();
+//    private static final String TAG = WebviewActivity.class.getSimpleName();
     private WebView mWebView;
     private TextView mTitleBarText;
     private ProgressDialog mProgressDialog;

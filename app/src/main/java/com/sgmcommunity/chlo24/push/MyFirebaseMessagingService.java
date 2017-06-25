@@ -11,7 +11,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -19,11 +18,8 @@ import com.sgmcommunity.chlo24.R;
 import com.sgmcommunity.chlo24.activity.Main;
 import com.sgmcommunity.chlo24.activity.PushMessageWebview;
 import com.sgmcommunity.chlo24.activity.Splash;
-import com.sgmcommunity.chlo24.application.CustomApplication;
 
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by hunter on 2017-05-18.
@@ -48,10 +44,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String body = ss[1].substring(5);
         int ds = ss[2].lastIndexOf("}");
         String title = ss[2].substring(6, ds);
-        appStatus = ((CustomApplication) getApplication()).getAppStatus().toString();
+//        appStatus = ((CustomApplication) getApplication()).getAppStatus().toString();
         sendNotification(title, body);
 
-        Log.d(TAG, "onMessageReceived:-------------- "+contents);
+//        Log.d(TAG, "onMessageReceived:-------------- "+contents);
 
         mPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int pushCount = mPref.getInt("push_count",0);
@@ -68,9 +64,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         editor.commit();
         //푸시 카운트 저장
 
-        Log.d("-----------", "onMessageReceived: " + pushCount);
+//        Log.d("-----------", "onMessageReceived: " + pushCount);
 
-        Log.d("-------0", "onCreate: " + ((CustomApplication) getApplication()).getAppStatus());
+//        Log.d("-------0", "onCreate: " + ((CustomApplication) getApplication()).getAppStatus());
 
     }
 

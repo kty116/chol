@@ -33,7 +33,7 @@ public class CommonLib{
         HttpContext httpContext = mhttpClient.getHttpContext();
         CookieStore cookieStore = (CookieStore) httpContext.getAttribute(ClientContext.COOKIE_STORE);
         List<Cookie> cookies = cookieStore.getCookies();
-        Log.d(TAG, "cookieMaker: "+cookies.toString());
+//        Log.d(TAG, "cookieMaker: "+cookies.toString());
 
         CookieManager cookieManager = CookieManager.getInstance();
 

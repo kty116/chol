@@ -7,14 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.webkit.CookieSyncManager;
-import android.webkit.ValueCallback;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -23,17 +19,11 @@ import com.sgmcommunity.chlo24.R;
 import com.sgmcommunity.chlo24.push.MyFirebaseMessagingService;
 
 public class PushMessageWebview extends CustomActivity implements View.OnClickListener {
-    private static final String TAG = WebviewActivity.class.getSimpleName();
+//    private static final String TAG = WebviewActivity.class.getSimpleName();
     private WebView mWebView;
     private TextView mTitleBarText;
     private ProgressDialog mProgressDialog;
     private SharedPreferences mPref;
-    private ValueCallback<Uri> filePathCallbackNormal;
-    private ValueCallback<Uri[]> filePathCallbackLollipop;
-    private Uri mCapturedImageURI;
-    private final static int FILECHOOSER_NORMAL_REQ_CODE = 1;
-    private final static int FILECHOOSER_LOLLIPOP_REQ_CODE = 2;
-    private String mIntentAction;
     private String webAddress;
 
     @Override
@@ -44,7 +34,7 @@ public class PushMessageWebview extends CustomActivity implements View.OnClickLi
 
         Intent intent = getIntent();
         webAddress = intent.getStringExtra("web_address");
-        Log.d(TAG, "onCreate: " + webAddress);
+//        Log.d(TAG, "onCreate: " + webAddress);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
@@ -86,8 +76,7 @@ public class PushMessageWebview extends CustomActivity implements View.OnClickLi
 
         });
 
-        WebSettings webSettings = mWebView.getSettings();
-//        webSettings.setJavaScriptEnabled(true);
+//        WebSettings webSettings = mWebView.getSettings();
         mWebView.loadUrl(webAddress);
 
     }

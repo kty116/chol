@@ -3,12 +3,12 @@ package com.sgmcommunity.chlo24.activity;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
-import android.location.LocationManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.OrientationEventListener;
@@ -204,25 +204,30 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         } else {
             //녹화 시작
 
-            if (checkLocationServicesStatus()) {  //gps모드 활성화
+//            if (checkLocationServicesStatus()) {  //gps모드 활성화
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("run: ","ddddddddddddddddddd");
                         CoordinatesLoder coordinatesLoder = new CoordinatesLoder(getBaseContext(), mFolder + "/" + mFileName, false, mediaRecorder);
                         coordinatesLoder.buildGoogleApiClient();
                     }
                 }).start();
-            }
+//            }
 
             mCapterButton.setImageResource(R.drawable.ic_camera_blue);
         }
     }
 
     public boolean checkLocationServicesStatus() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        String gpsEnabled = android.provider.Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+        return gpsEnabled.matches(".*gps.*");
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+//                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     public void runMediaRecorder(final double lat, final double lon) {
@@ -247,7 +252,9 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                     mFileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
 
                     mediaRecorder.setOutputFile(mFolder + "/" + mFileName);
-                    mediaRecorder.setLocation(Float.valueOf(String.valueOf(lat)), Float.valueOf(String.valueOf(lon)));
+                    if (lat != 0.0) {
+                        mediaRecorder.setLocation(Float.valueOf(String.valueOf(lat)), Float.valueOf(String.valueOf(lon)));
+                    }
 
                     mediaRecorder.setPreviewDisplay(sv.getSurface());
                     mediaRecorder.prepare();
@@ -267,7 +274,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     }
 
     public void setCurrentTime() {
-       runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
@@ -281,40 +288,32 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                     }
                     time += 1000;
 //                    mTimeText.setText(getTime(time));
-                    Log.d("run: ",getTime(time));
+                    Log.d("run: ", getTime(time));
 
                 }
             }
         });
     }
 
-    private String getTime(long average)
-    {
+    private String getTime(long average) {
         // 초,분,시간 단위로 보여주기 위해 "0시 0분 0초" type으로 변경해서 return
         StringBuffer sb = new StringBuffer();
         long second = (average / 1000) % 60;
         long minute = (average / (1000 * 60)) % 60;
         long hour = (average / (1000 * 60 * 60)) % 24;
-        if(hour > 0)
-        {
+        if (hour > 0) {
             sb.append((int) hour + "시 ");
         }
-        if(minute > 0)
-        {
+        if (minute > 0) {
             sb.append((int) minute + "분 ");
         }
-        if(second > 0)
-        {
+        if (second > 0) {
             sb.append((int) second + "초 ");
         }
-        if(sb.toString().length() == 0)
-        {
-            if(average > 0)
-            {
+        if (sb.toString().length() == 0) {
+            if (average > 0) {
                 sb.append("0초 미만 (" + average + ")");
-            }
-            else
-            {
+            } else {
                 sb.append("0초 미만 ");
             }
         }

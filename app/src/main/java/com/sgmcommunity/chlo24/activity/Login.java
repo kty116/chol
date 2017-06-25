@@ -166,6 +166,8 @@ public class Login extends CustomActivity implements View.OnClickListener {
 
     private void mainIntent() {
         Intent intent = new Intent(this, Main.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }

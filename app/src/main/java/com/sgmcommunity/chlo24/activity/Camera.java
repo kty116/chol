@@ -6,11 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.hardware.SensorManager;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -101,8 +102,8 @@ public class Camera extends AppCompatActivity implements View.OnClickListener {
                         // Create a bitmap
 
                         BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inSampleSize=2;
-                        Bitmap result = BitmapFactory.decodeByteArray(picture, 0, picture.length,options);
+                        options.inSampleSize = 2;
+                        Bitmap result = BitmapFactory.decodeByteArray(picture, 0, picture.length, options);
 
                         Bitmap bitmap = imgRotate(result, orient);
 
@@ -175,9 +176,13 @@ public class Camera extends AppCompatActivity implements View.OnClickListener {
     }
 
     public boolean checkLocationServicesStatus() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+//                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        String gpsEnabled = android.provider.Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+        return gpsEnabled.matches(".*gps.*");
     }
 }

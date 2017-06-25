@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -26,6 +27,9 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by hunter on 2017-06-21.
  */
@@ -46,7 +50,7 @@ public class CoordinatesLoder implements GoogleApiClient.ConnectionCallbacks, Go
         this.mediaRecorder = mediaRecorder;
     }
 
-    public CoordinatesLoder(Context context, String fileName,boolean isImageFile) {
+    public CoordinatesLoder(Context context, String fileName, boolean isImageFile) {
         this.context = context;
         this.fileName = fileName;
         this.isImageFile = isImageFile;
@@ -71,28 +75,41 @@ public class CoordinatesLoder implements GoogleApiClient.ConnectionCallbacks, Go
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         } else {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            
 
 //            String lat = String.valueOf(mLastLocation.getLatitude());
 //            String lon = String.valueOf(mLastLocation.getLongitude());
 
 //            Toast.makeText(context, mLastLocation.getLatitude() + "" + mLastLocation.getLongitude(), Toast.LENGTH_SHORT).show();
 //            Log.d("위도경도 : ", mLastLocation.getLatitude() + "" + mLastLocation.getLongitude());
-            if (mLastLocation != null) {
-                //위도값이 없을때 메타데이터에 값 넣지 않음
+//            if (mLastLocation != null) {
+            //위도값이 없을때 메타데이터에 값 넣지 않음
 
-                if(isImageFile == true) {
+
+            if (isImageFile == true) {
+                //사진 촬영
+                if (mLastLocation != null) {
+//                    Log.d(TAG, "onConnected: dddddddddddddddddddddddddddddd");
 
                     try {
                         setMetaData(fileName, mLastLocation.getLatitude(), mLastLocation.getLongitude());
 //                        getMetaData(fileName);
                     } catch (IOException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
 //                    Toast.makeText(context, "메타데이터 오류", Toast.LENGTH_SHORT).show();
                     }
-                }else {
+                }
 
-                    EventBus.getDefault().post(new CompliteCoordinatesEvent(mLastLocation.getLatitude(),mLastLocation.getLongitude()));
 
+            } else {
+                //동영상 촬영
+                if (mLastLocation != null) {
+//                    Log.d(TAG, "onConnected: dddddddddddddddddddddddddddddd");
+                    
+                    EventBus.getDefault().post(new CompliteCoordinatesEvent(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                } else {
+                    EventBus.getDefault().post(new CompliteCoordinatesEvent(0.0, 0.0));
+                }
 
 //                    mediaRecorder.setLocation(Float.valueOf(String.valueOf(mLastLocation.getLatitude())),Float.valueOf(String.valueOf(mLastLocation.getLongitude())));
 //                    ContentValues values = new ContentValues();
@@ -122,19 +139,17 @@ public class CoordinatesLoder implements GoogleApiClient.ConnectionCallbacks, Go
 //                        retriever.setDataSource(context,uri);
 //
 //                        Toast.makeText(context, retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_LOCATION), Toast.LENGTH_SHORT).show();
-                    }
+            }
 
 //                    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, fileName));
 //                }
-            }else {
 //                Toast.makeText(context, "값 없음", Toast.LENGTH_SHORT).show();
-            }
-            if (googleApiClient != null && googleApiClient.isConnected()) {
+        }
+        if (googleApiClient != null && googleApiClient.isConnected()) {
 
-                mLastLocation = null;
-                googleApiClient.disconnect();
-                googleApiClient = null;
-            }
+            mLastLocation = null;
+            googleApiClient.disconnect();
+            googleApiClient = null;
         }
     }
 

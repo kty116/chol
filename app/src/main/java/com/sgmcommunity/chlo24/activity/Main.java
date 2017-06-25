@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -65,13 +65,13 @@ public class Main extends CustomActivity implements View.OnClickListener {
         String LVersionName = BuildConfig.VERSION_NAME;
         String CVersionName = null;
         try {
-            PackageInfo pi= getPackageManager().getPackageInfo(getPackageName(), 0);
+            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
             CVersionName = pi.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
-        mVersionText.setText("최신버전                    "+LVersionName+"\n현재버전                    "+CVersionName);
+        mVersionText.setText("최신버전                    " + LVersionName + "\n현재버전                    " + CVersionName);
 
         mSettingButton.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
@@ -278,7 +278,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("사진에 위치 정보를 저장하기 위해서는 위치 서비스가 필요합니다.\n"
-                + "위치 서비스를 활성화를 원하시면 설정을 누르세요.");
+                + "위치 서비스 활성화를 원하시면 설정을 누르세요.");
         builder.setCancelable(true);
         builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
             @Override
@@ -295,8 +295,19 @@ public class Main extends CustomActivity implements View.OnClickListener {
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                Intent intent = new Intent(Main.this, activity);
-                startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+                builder.setMessage("위치 서비스 비활성화로 사진에 위치 정보가 저장 되지 않습니다.");
+                builder.setCancelable(true);
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(Main.this, activity);
+                        startActivity(intent);
+                    }
+                });
+                builder.create().show();
+
+
             }
         });
         builder.create().show();
@@ -311,7 +322,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
 
             case GPS_ENABLE_REQUEST_CODE:
 
-                Intent intent = new Intent(this,mActivity);
+                Intent intent = new Intent(this, mActivity);
                 startActivity(intent);
 
                 //설정 들어간뒤의 화면
@@ -322,10 +333,14 @@ public class Main extends CustomActivity implements View.OnClickListener {
     }
 
     public boolean checkLocationServicesStatus() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        String gpsEnabled = android.provider.Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+        return gpsEnabled.matches(".*gps.*");
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+//                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
 

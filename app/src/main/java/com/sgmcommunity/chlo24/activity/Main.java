@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
@@ -22,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.sgmcommunity.chlo24.BuildConfig;
+import com.sgmcommunity.chlo24.MarketVersionChecker;
 import com.sgmcommunity.chlo24.R;
 import com.sgmcommunity.chlo24.dto.MemberDTO;
 import com.sgmcommunity.chlo24.push.MyFirebaseMessagingService;
@@ -41,6 +42,8 @@ public class Main extends CustomActivity implements View.OnClickListener {
     private ImageView mLoginButton;
     private Class mActivity;
     private TextView mVersionText;
+    private String store_version = null;
+    private String current_version = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +65,8 @@ public class Main extends CustomActivity implements View.OnClickListener {
         mNavMenu = (LinearLayout) findViewById(R.id.nav_menu);
         mMainDrawer = (DrawerLayout) findViewById(R.id.main_drawer);
         mVersionText = (TextView) findViewById(R.id.version_text);
-        String LVersionName = BuildConfig.VERSION_NAME;
-        String CVersionName = null;
-        try {
-            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-            CVersionName = pi.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        mVersionText.setText("최신버전                    " + LVersionName + "\n현재버전                    " + CVersionName);
+        getLatestVersionName();
 
         mSettingButton.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
@@ -98,6 +93,33 @@ public class Main extends CustomActivity implements View.OnClickListener {
 
         //메인 액티비티의 포,백 상태확인
         isForeGround = true;
+    }
+
+    /**
+     * 버전 정보 textView에 setText
+     */
+    private void getLatestVersionName() {
+        final Handler handler = new Handler();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                store_version = MarketVersionChecker.getMarketVersion(getPackageName());
+
+                try {
+                    PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    current_version = pi.versionName;
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mVersionText.setText("최신버전                    " + store_version + "\n현재버전                    " + current_version);
+                    }
+                });
+            }
+        });
+        thread.start();
     }
 
     @Override

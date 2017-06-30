@@ -133,6 +133,7 @@
         android:layout_height="10dp" />
 
     <LinearLayout
+        android:id="@+id/menu_setting_button"
         android:layout_marginLeft="15dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"

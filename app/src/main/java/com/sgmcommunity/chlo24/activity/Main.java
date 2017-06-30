@@ -51,6 +51,51 @@ public class Main extends CustomActivity implements View.OnClickListener {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
+        init();
+        isForeGround = true; //푸시시 포/백그라운드인지 확인용 변수
+        getLatestVersionName();
+        setMemberDTO();
+
+        if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
+            mLoginButton.setImageResource(R.drawable.main_ic_logout_white);
+        } else {
+            mLoginButton.setImageResource(R.drawable.main_ic_login_white);
+        }
+
+        //firebase 셋팅
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+
+        ConfirmPushMessage();
+    }
+
+    /**
+     * MemberDTO에 Pref에 저장되있는 데이터 넣기
+     */
+    private void setMemberDTO() {
+        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+        memberDTO = new MemberDTO();
+        memberDTO.setUserId(mPref.getString("id", "null"));
+        memberDTO.setUserPw(mPref.getString("password", "null"));
+
+    }
+
+    /**
+     * 현재 푸시카운트가 0이상이면 푸시메세지웹뷰 띄우기
+     */
+    private void ConfirmPushMessage() {
+        if (mPref.getInt("push_count", 0) > 0) { //저장된 푸시카운트가 0이상이면 푸시메세지 띄우기
+            Intent intent = new Intent(this, PushMessageWebview.class);
+            intent.putExtra("web_address", "http://www.chol24.com" + MyFirebaseMessagingService.contents);
+            startActivity(intent);
+        }
+    }
+
+    private void init() {
+        mSettingButton = (ImageView) findViewById(R.id.setting_button);
+        mLoginButton = (ImageView) findViewById(R.id.logout_button);
+        mNavMenu = (LinearLayout) findViewById(R.id.nav_menu);
+        mMainDrawer = (DrawerLayout) findViewById(R.id.main_drawer);
+        mVersionText = (TextView) findViewById(R.id.version_text);
         findViewById(R.id.look_button).setOnClickListener(this);
         findViewById(R.id.participation_button).setOnClickListener(this);
         findViewById(R.id.video_button).setOnClickListener(this);
@@ -60,39 +105,10 @@ public class Main extends CustomActivity implements View.OnClickListener {
         findViewById(R.id.menu_noti_button).setOnClickListener(this);
         findViewById(R.id.camera_button).setOnClickListener(this);
         findViewById(R.id.intro_button).setOnClickListener(this);
-        mSettingButton = (ImageView) findViewById(R.id.setting_button);
-        mLoginButton = (ImageView) findViewById(R.id.logout_button);
-        mNavMenu = (LinearLayout) findViewById(R.id.nav_menu);
-        mMainDrawer = (DrawerLayout) findViewById(R.id.main_drawer);
-        mVersionText = (TextView) findViewById(R.id.version_text);
-
-        getLatestVersionName();
+        findViewById(R.id.menu_setting_button).setOnClickListener(this);
 
         mSettingButton.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
-
-        mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        memberDTO = new MemberDTO();
-        memberDTO.setUserId(mPref.getString("id", "null"));
-        memberDTO.setUserPw(mPref.getString("password", "null"));
-
-        if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
-            mLoginButton.setImageResource(R.drawable.main_ic_logout_white);
-        } else {
-            mLoginButton.setImageResource(R.drawable.main_ic_login_white);
-        }
-
-        //추가한 라인
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
-
-        if (mPref.getInt("push_count", 0) > 0) { //저장된 푸시카운트가 0이상이면 푸시메세지 띄우기
-            Intent intent = new Intent(this, PushMessageWebview.class);
-            intent.putExtra("web_address", "http://www.chol24.com" + MyFirebaseMessagingService.contents);
-            startActivity(intent);
-        }
-
-        //메인 액티비티의 포,백 상태확인
-        isForeGround = true;
     }
 
     /**
@@ -126,7 +142,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
 
-            //액션바
+            //  ---------------------------------- 액션바 버튼 -------------------------------------
 
             case R.id.setting_button:
                 mMainDrawer.openDrawer(mNavMenu);
@@ -136,6 +152,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
                 if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     //값 있을때
                     AlertDialog.Builder alert_confirm = new AlertDialog.Builder(Main.this);
+                    alert_confirm.setCancelable(true);
                     alert_confirm.setMessage("로그아웃 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
                             new DialogInterface.OnClickListener() {
                                 @Override
@@ -153,6 +170,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
                                         CookieManager.getInstance().flush();
                                     }
                                     Toast.makeText(Main.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                                    mLoginButton.setImageResource(R.drawable.main_ic_login_white);
 //                                    Log.d("------", "onClick: " + mPref.getString("token", "null"));
 //                                    Intent intent3 = new Intent(Main.this, Login.class);
 //                                    startActivity(intent3);
@@ -165,6 +183,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
                 } else {
                     //값 없을때
                     AlertDialog.Builder alert_confirm = new AlertDialog.Builder(Main.this);
+                    alert_confirm.setCancelable(true);
                     alert_confirm.setMessage("로그인 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
                             new DialogInterface.OnClickListener() {
                                 @Override
@@ -179,7 +198,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
 
                 }
 
-                // 메인 아이콘
+                //  ----------------------------- 메인 화면 버튼 ---------------------------------------
 
             case R.id.look_button:
                 if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
@@ -230,15 +249,15 @@ public class Main extends CustomActivity implements View.OnClickListener {
                 startActivity(intent2);
                 break;
 
-            //사이드 메뉴
+//           --------------------- 슬라이드 메뉴 버튼-------------------------------------
 
-            case R.id.intro_button:
+            case R.id.intro_button:  //천리안 소개
                 Intent intent3 = new Intent(this, Intro.class);
                 startActivity(intent3);
                 mMainDrawer.closeDrawer(mNavMenu);
                 break;
 
-            case R.id.menu_inquiry_button:
+            case R.id.menu_inquiry_button:  //문의하기
                 if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent6 = new Intent(this, WebviewActivity.class);
                     intent6.putExtra("web_address", "http://www.chol24.com/app_contact.php");
@@ -250,7 +269,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
                 }
                 break;
 
-            case R.id.menu_morgue_button:
+            case R.id.menu_morgue_button:  //자료실
                 if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent8 = new Intent(this, WebviewActivity.class);
                     intent8.putExtra("web_address", "http://www.chol24.com/app_pds.php");
@@ -262,10 +281,10 @@ public class Main extends CustomActivity implements View.OnClickListener {
                 }
                 break;
 
-            case R.id.menu_noti_button:
+            case R.id.menu_noti_button:  //공지사항
                 if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
                     Intent intent5 = new Intent(this, WebviewActivity.class);
-                    intent5.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                    intent5.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent5.putExtra("web_address", "http://www.chol24.com/app_notice.php");
                     intent5.putExtra("title_text", "공지사항");
                     startActivity(intent5);
@@ -274,6 +293,19 @@ public class Main extends CustomActivity implements View.OnClickListener {
                     setLoginDialog();
                 }
                 break;
+
+            case R.id.menu_setting_button:  //설정
+                if (!(memberDTO.getUserId().equals("null") && memberDTO.getUserPw().equals("null"))) {
+                    Intent intent9 = new Intent(this, Setting.class);
+//                    intent9.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent9);
+                    mMainDrawer.closeDrawer(mNavMenu);
+                } else {
+                    setLoginDialog();
+                }
+                break;
+
+
         }
     }
 
@@ -306,9 +338,7 @@ public class Main extends CustomActivity implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int id) {
 
-                Intent callGPSSettingIntent
-                        = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-
+                Intent callGPSSettingIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE);
 
             }
@@ -328,7 +358,6 @@ public class Main extends CustomActivity implements View.OnClickListener {
                     }
                 });
                 builder.create().show();
-
 
             }
         });

@@ -1,6 +1,7 @@
 package com.sgmcommunity.chlo24.activity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
 import android.media.CamcorderProfile;
@@ -51,6 +52,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main2);
 
         mSurface = (SurfaceView) findViewById(R.id.surface_view);
@@ -58,8 +60,6 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         mCapterButton.setOnClickListener(this);
         mTimeText = (TextView) findViewById(R.id.time_text);
 
-//        cam = android.hardware.Camera.open();
-//        cam.setDisplayOrientation(90);
         sv = mSurface.getHolder();
         sv.addCallback(this);
         sv.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
